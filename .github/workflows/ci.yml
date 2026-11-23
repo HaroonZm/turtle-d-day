@@ -1,0 +1,94 @@
+# =============================================================
+#  CI Turtle D-Day — tests + builds automatiques (GameCI)
+#  Expliqué ligne par ligne dans Docs/Cours/01_Fondations.md §6
+# =============================================================
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:        # bouton "Run workflow" manuel dans l'onglet Actions
+
+# Si on pousse deux fois de suite, on annule l'exécution précédente (économie de temps).
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+  UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+  UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+
+jobs:
+  # ---------------------------------------------------------
+  # 1) Tests : Edit Mode + Play Mode
+  # ---------------------------------------------------------
+  test:
+    name: Tests (Edit + Play Mode)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupérer le code (avec les fichiers LFS)
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Cache du dossier Library (évite de réimporter tous les assets)
+        uses: actions/cache@v4
+        with:
+          path: Library
+          key: Library-test-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: Library-test-
+
+      - name: Lancer les tests Unity
+        uses: game-ci/unity-test-runner@v4
+        id: tests
+        with:
+          testMode: all
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          checkName: Résultats des tests
+
+      - name: Publier les résultats en artefact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: ${{ steps.tests.outputs.artifactsPath }}
+
+  # ---------------------------------------------------------
+  # 2) Builds : seulement si les tests passent, seulement sur main
+  # ---------------------------------------------------------
+  build:
+    name: Build ${{ matrix.targetPlatform }}
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        targetPlatform:
+          - StandaloneWindows64
+          - WebGL
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - uses: actions/cache@v4
+        with:
+          path: Library
+          key: Library-${{ matrix.targetPlatform }}-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: Library-${{ matrix.targetPlatform }}-
+
+      - name: Compiler le jeu
+        uses: game-ci/unity-builder@v4
+        with:
+          targetPlatform: ${{ matrix.targetPlatform }}
+          buildName: TurtleDDay
+
+      - name: Publier le build en artefact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Build-${{ matrix.targetPlatform }}
+          path: build/${{ matrix.targetPlatform }}
+          retention-days: 7

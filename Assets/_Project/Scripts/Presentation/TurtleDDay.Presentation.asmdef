@@ -1,0 +1,14 @@
+{
+    "name": "TurtleDDay.Presentation",
+    "rootNamespace": "TurtleDDay.Presentation",
+    "references": ["TurtleDDay.Core", "TurtleDDay.Simulation", "TurtleDDay.Gameplay"],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

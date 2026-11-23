@@ -1,0 +1,14 @@
+{
+    "name": "TurtleDDay.App",
+    "rootNamespace": "TurtleDDay.App",
+    "references": ["TurtleDDay.Core", "TurtleDDay.Simulation", "TurtleDDay.Services", "TurtleDDay.Gameplay", "TurtleDDay.Presentation"],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,0 +1,14 @@
+{
+    "name": "TurtleDDay.Gameplay",
+    "rootNamespace": "TurtleDDay.Gameplay",
+    "references": ["TurtleDDay.Core", "TurtleDDay.Simulation", "TurtleDDay.Services", "Unity.InputSystem"],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
