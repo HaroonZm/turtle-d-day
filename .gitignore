@@ -71,3 +71,6 @@ desktop.ini
 *.ulf
 *.alf
 .env
+
+# Claude Code : réglages personnels (non partagés)
+.claude/settings.local.json
