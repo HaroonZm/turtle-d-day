@@ -318,6 +318,7 @@ On l'appliquera pour toutes les règles de `Simulation`.
 | **`needs:`** | Dépendance entre jobs | `build` attend que `test` réussisse |
 | **Matrix** | Lancer le même job avec plusieurs paramètres, en parallèle | Windows **et** WebGL |
 | **Secrets** | Variables chiffrées, jamais affichées dans les logs | Licence Unity |
+| **`permissions:`** | Droits du jeton automatique `GITHUB_TOKEN`. Par défaut il est en lecture seule ; sans `checks: write`, l'action de test ne peut pas publier son résumé et échoue avec « Resource not accessible by integration » (c'est arrivé sur ce projet !) | `contents: read`, `checks: write` |
 | **Cache** | Garder un dossier d'une exécution à l'autre | `Library/` (sinon 10 min d'import à chaque fois) |
 | **Artifact** | Un fichier produit, téléchargeable depuis GitHub | Résultats des tests, builds |
 

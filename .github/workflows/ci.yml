@@ -15,6 +15,12 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
+# Droits du jeton GITHUB_TOKEN : lecture du code + écriture des "checks"
+# (unity-test-runner publie un résumé des tests sur le commit).
+permissions:
+  contents: read
+  checks: write
+
 env:
   UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
   UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
@@ -29,12 +35,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Récupérer le code (avec les fichiers LFS)
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           lfs: true
 
       - name: Cache du dossier Library (évite de réimporter tous les assets)
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: Library
           key: Library-test-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
@@ -50,7 +56,7 @@ jobs:
 
       - name: Publier les résultats en artefact
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: test-results
           path: ${{ steps.tests.outputs.artifactsPath }}
@@ -70,11 +76,11 @@ jobs:
           - StandaloneWindows64
           - WebGL
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           lfs: true
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         with:
           path: Library
           key: Library-${{ matrix.targetPlatform }}-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
@@ -87,7 +93,7 @@ jobs:
           buildName: TurtleDDay
 
       - name: Publier le build en artefact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: Build-${{ matrix.targetPlatform }}
           path: build/${{ matrix.targetPlatform }}
