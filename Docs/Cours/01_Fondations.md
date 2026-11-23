@@ -327,14 +327,12 @@ On l'appliquera pour toutes les règles de `Simulation`.
 
 ### 7.4 Pourquoi la CI a besoin d'une licence Unity
 
-Unity n'accepte de s'exécuter qu'avec une licence activée, même sur un serveur. Il faut donc fournir **trois secrets** au dépôt. **C'est toi qui dois les saisir** (ce sont tes identifiants : je ne les manipule jamais).
+Unity n'accepte de s'exécuter qu'avec une licence activée, même sur un serveur. La CI utilise uniquement le secret `UNITY_LICENSE`.
 
-1. Ouvre Unity Hub avec ton compte. Ta licence Personal est activée sur ton PC, dans le fichier `C:\ProgramData\Unity\Unity_lic.ulf`.
-2. Sur GitHub, dans ton dépôt, va dans **Settings → Secrets and variables → Actions → New repository secret** et crée :
-   - `UNITY_LICENSE` : le **contenu** complet du fichier `Unity_lic.ulf` ;
-   - `UNITY_EMAIL` : l'email de ton compte Unity ;
-   - `UNITY_PASSWORD` : son mot de passe.
-3. Vérifie la procédure à jour sur la page *Activation* de la documentation GameCI : elle évolue avec les changements de licence d'Unity.
+1. Va dans **Settings → Secrets and variables → Actions → New repository secret** dans ton dépôt.
+2. Crée `UNITY_LICENSE` avec le contenu complet d'un fichier `.ulf` valide pour Unity hébergé sur GitHub Actions.
+3. Une licence liée à une autre machine est rejetée par Unity avec l'erreur « Machine bindings don't match ». Ne réutilise pas le fichier de licence d'un poste local : régénère une licence CI avec une licence Unity Organisation/Pro ou selon la procédure active de GameCI.
+4. Vérifie la procédure à jour sur la page *Activation* de la documentation GameCI : elle évolue avec les changements de licence d'Unity.
 
 > 🔒 Le `.gitignore` exclut `*.ulf` : impossible de commiter ta licence par erreur.
 
