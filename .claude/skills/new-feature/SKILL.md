@@ -1,6 +1,6 @@
 ---
 name: new-feature
-description: Workflow complet pour une nouvelle feature de Turtle D-Day — plan écrit dans Docs/tasks/, validation par l'utilisateur, implémentation par étapes avec tests, revue, commit. Lancer avec /new-feature <description>.
+description: Ajoute au plan de Turtle D-Day une feature qui n'y figure pas encore — spec détaillée dans Docs/Plan/features/ et ligne dans le plan directeur, sans coder. L'implémentation se fait ensuite avec /next FXX. Lancer avec /new-feature <description>.
 disable-model-invocation: true
 ---
 
@@ -8,23 +8,16 @@ disable-model-invocation: true
 
 Feature demandée : $ARGUMENTS
 
-## Phase 1 : plan (aucun code)
+> Pour une feature **déjà prévue** dans `Docs/Plan/00_Plan_Directeur.md`, utilise `/next` plutôt que cette commande. Si elle existe déjà, dis-le et propose `/next FXX`.
 
-1. Si besoin de contexte, délègue la recherche au subagent `unity-explorer` plutôt que de lire beaucoup de fichiers ici.
-2. Lis seulement la section utile de `Docs/01_Propositions_Design_et_Tech.md` et les ADR concernées.
-3. Crée `Docs/tasks/NNN-<slug>.md` à partir de `Docs/tasks/_TEMPLATE.md` (NNN = numéro suivant).
-4. Dans le plan, liste chaque **pattern ou outil nouveau** (ex. Observer, object pooling, NetworkVariable) avec une explication courte : pourquoi lui, quelle alternative.
-5. **Arrête-toi** et demande à l'utilisateur de valider le plan. Ne code rien avant son accord.
-
-## Phase 2 : implémentation
-
-- Une étape du plan à la fois ; coche-la dans le fichier de tâche quand elle est faite.
-- Respecte les couches de `CLAUDE.md`. Règle pure → `Simulation` + test EditMode en premier.
-- Lance les tests (skill `unity:unity-cli`) quand l'éditeur est disponible ; sinon dis clairement qu'ils n'ont pas été lancés.
-
-## Phase 3 : clôture
-
-1. Délègue une revue au subagent `code-reviewer`, corrige ce qui est confirmé.
-2. Mets le statut du fichier de tâche à `Terminé` avec un résumé de 3 lignes (ce qui marche, ce qui reste).
-3. Si une décision d'architecture a été prise, propose une nouvelle ADR dans `Docs/ADR/`.
-4. Propose un commit Conventional Commits ; ne commite qu'avec l'accord de l'utilisateur.
+1. Lis le tableau du § 3 du plan directeur pour vérifier que la feature n'existe pas, et trouver le prochain ID libre.
+2. Si besoin de contexte, délègue la recherche au subagent `unity-explorer`. Lis seulement la section utile de `Docs/01_Propositions_Design_et_Tech.md` et les ADR concernées.
+3. Crée `Docs/Plan/features/FXX_<slug>.md` à partir de `_TEMPLATE.md`, en respectant `Docs/Plan/01_Normes_Ingenierie.md` :
+   - des critères d'acceptation vérifiables ;
+   - une conception qui respecte les couches ;
+   - des valeurs d'équilibrage en ScriptableObject ;
+   - des étapes de la taille d'un commit ;
+   - des tests ;
+   - les **patterns et outils nouveaux** expliqués, avec leur alternative.
+4. Ajoute la ligne dans le plan directeur (jalon, dépendances, cours, statut 🔵 ou 🟢).
+5. **Arrête-toi** : présente le résumé et demande validation. Ne code rien. L'implémentation se lance ensuite avec `/next FXX`.

@@ -4,157 +4,116 @@ Ce guide est concret : quoi cliquer, quoi taper, dans quel ordre.
 
 ---
 
-## 0. Ce qui est déjà en place (tu n'as rien à créer)
+## 0. Le système en un coup d'œil
 
-| Fichier | Rôle |
+```
+Docs/Plan/00_Plan_Directeur.md      QUOI construire, dans quel ordre, et où on en est (statuts)
+Docs/Plan/01_Normes_Ingenierie.md   COMMENT construire (DoR, DoD, règles de code, budgets)
+Docs/Plan/features/FXX_*.md         LE DÉTAIL d'une feature : conception, étapes à cocher, tests
+Docs/Cours/NN_*.md                  CE QUE TU APPRENDS, écrit à la fin de chaque feature
+CLAUDE.md                           le résumé des règles, lu automatiquement par chaque session
+```
+
+| Commande ou agent | Rôle |
 |---|---|
-| `CLAUDE.md` | Règles du projet, lues automatiquement par chaque session |
-| `.claude/settings.json` | Permissions : git en lecture autorisé ; `Library/` et les licences interdits |
-| `.claude/agents/unity-explorer.md` | Subagent de recherche (modèle Haiku, peu coûteux) |
-| `.claude/agents/code-reviewer.md` | Subagent de relecture avant commit |
-| `.claude/skills/new-feature/SKILL.md` | Commande `/new-feature` : plan → validation → code → revue → commit |
-| `Docs/tasks/_TEMPLATE.md` | Modèle de fichier de tâche |
+| `/next` | Prend la **prochaine** feature prête du plan (ou la reprend si elle est en cours) |
+| `/next F04` | Démarre ou reprend une feature précise |
+| `/new-feature …` | Ajoute au plan une feature **non prévue** (écrit la spec, ne code pas) |
+| `unity-explorer` | Un subagent de recherche, peu coûteux |
+| `code-reviewer` | Un subagent de relecture, appelé automatiquement en fin de feature |
 
-**Une seule action à faire, une fois** : commiter ces fichiers, pour qu'ils soient versionnés avec le jeu.
+**Tu n'as plus à décider quoi faire** : le plan directeur le sait. Tu tapes `/next`.
 
 ---
 
-## 1. La routine d'une tâche (90 % du temps)
+## 1. La routine (90 % du temps)
 
 ### Étape 1 : ouvrir une session neuve
 
-Dans l'app Claude, onglet **Code**, clique sur **nouvelle session** sur le dossier `Turtle D-day`.
-Règle : **une tâche = une session neuve**. Ne réutilise pas une vieille conversation pour une autre tâche.
+Dans l'app Claude, onglet **Code**, crée une nouvelle session sur le dossier `Turtle D-day`. **Une feature = une session.**
 
-### Étape 2 : lancer la feature
+### Étape 2 : taper `/next`
 
-Tape exactement :
+Claude lit le plan, choisit la feature, puis te présente :
 
-```
-/new-feature Règle d'endurance de la tortue (sprint consomme, recharge seulement en marchant à découvert) + config en ScriptableObject
-```
+- l'objectif et les critères d'acceptation ;
+- les **patterns et outils nouveaux**, expliqués ;
+- les questions à trancher.
 
-Plus la description est précise, moins il y aura d'allers-retours.
+Il **s'arrête** à ce moment-là.
 
-### Étape 3 : relire le plan (c'est TON moment)
+### Étape 3 : valider (c'est TON moment)
 
-Claude crée par exemple `Docs/tasks/001-turtle-stamina.md` et **s'arrête**. Ouvre le fichier et vérifie :
-
-- l'**objectif** est vérifiable ;
-- les **patterns nouveaux** sont expliqués, et tu les comprends ;
-- les **fichiers réservés** sont listés.
-
-Réponds `Validé`, ou bien `Validé, mais ...` suivi de tes corrections.
+Lis les concepts nouveaux. Si tu ne comprends pas, demande une explication **avant** de valider. Réponds `Validé` ou `Validé, mais ...`.
 
 ### Étape 4 : laisser implémenter
 
-Claude code étape par étape et coche les cases du fichier de tâche. Tu peux faire autre chose pendant ce temps.
+Claude code étape par étape, coche les étapes dans la spec, lance les tests et propose des commits.
 
-### Étape 5 : tester dans Unity
+### Étape 5 : vérifier dans Unity
 
-Ouvre Unity → **Window → General → Test Runner → Run All**, puis teste en Play.
-Si quelque chose cloche, décris-le en une phrase, par exemple : `En Play, l'endurance ne remonte jamais`.
+À la fin, Claude te donne la **liste exacte** des vérifications manuelles à faire, par exemple : « Ouvre Sandbox_Turtle, appuie sur Play, sprinte avec Maj : la jauge doit descendre ».
 
-### Étape 6 : revue et commit
+### Étape 6 : clôture
 
-```
-Fais la revue avec code-reviewer puis propose le commit
-```
+Claude lance la revue, écrit le cours, met le plan à jour et propose le commit final. Tu valides avec le bouton **Commit**, puis tu fermes la session.
 
-Claude corrige ce que la revue a trouvé, puis te propose un message de commit. Valide avec le bouton **Commit**.
+### Reprendre après une interruption
 
-### Étape 7 : fermer
-
-La tâche est finie : ferme la session ou archive-la. **Ne continue pas dans la même session.**
-
-### Reprendre une tâche interrompue (tu as eu cours entre-temps)
-
-Ouvre une **nouvelle** session et tape :
-
-```
-Reprends Docs/tasks/001-turtle-stamina.md là où elle s'est arrêtée
-```
-
-Le fichier de tâche contient le plan et les cases cochées : Claude n'a pas besoin de relire l'ancienne conversation.
+Ouvre une nouvelle session et tape `/next`. La feature est 🟡 et ses cases sont cochées : Claude reprend là où elle s'est arrêtée, sans relire l'ancienne conversation.
 
 ---
 
-## 2. Faire travailler plusieurs sessions en parallèle
+## 2. Travailler en parallèle
 
-### Étape A : découper (dans une session dédiée au planning)
+Le plan directeur (§ 4) indique quelles features peuvent tourner **en même temps**. En M1, après F01 : **F02, F04 et F05** en parallèle, et **F07** (la scène) à part.
 
-```
-Découpe la semaine 1 de la feuille de route en tâches indépendantes dans Docs/tasks/
-(une par système, avec les fichiers réservés de chacune). Ne code rien.
-```
-
-Résultat attendu, par exemple :
-
-| Tâche | Couches | Fichiers réservés | Parallélisable ? |
-|---|---|---|---|
-| 001 Endurance et config | Simulation, Data | `Scripts/Simulation/Turtle/`, `Data/Config/Turtle*` | ✅ |
-| 002 Contrôleur de tortue | Gameplay | `Scripts/Gameplay/Turtle/` | ✅ (dépend de l'interface de 001) |
-| 003 Vol et piqué du rapace | Simulation, Gameplay | `Scripts/*/Raptor/` | ✅ |
-| 004 Île en greybox | Scène | `Scenes/Island_Greybox.unity` | ❌ éditeur Unity, à faire seul |
-
-### Étape B : lancer une session par tâche, chacune dans son worktree
-
-Un **worktree** est une deuxième copie de travail du même dépôt git, sur **sa propre branche**. Deux sessions ne se marchent donc jamais dessus, même si l'une laisse du code cassé.
-
-- Dans l'app, crée la nouvelle session **en mode worktree** (option proposée à la création de session), puis tape `/new-feature` suivi de la tâche, par exemple `/new-feature Docs/tasks/003-raptor-dive.md`.
-- Ou bien demande-le depuis une session existante :
-  `Lance une session séparée en worktree pour la tâche Docs/tasks/003-raptor-dive.md`
-
-### Étape C : rassembler le travail
-
-Chaque session termine sur sa branche. Pour l'intégrer à `main`, deux options :
-
-- `Ouvre une Pull Request pour cette branche` : la CI vérifie automatiquement, puis tu fusionnes sur GitHub ;
-- ou, en local, `Fusionne la branche feat/raptor-dive dans main`.
+1. Dans l'app, crée une session **en mode worktree** (option proposée à la création de session) pour chaque feature parallèle.
+2. Dans chacune, tape `/next F02`, `/next F04`… Chaque spec **réserve ses fichiers**, ce qui évite les conflits.
+3. Chaque session termine sur sa branche. Demande ensuite `Ouvre une Pull Request pour cette branche` : la CI vérifie, et tu fusionnes sur GitHub.
 
 ### ⚠️ Les 3 règles Unity du parallélisme
 
-1. **2 à 3 sessions au maximum**, sur des **systèmes différents** (des dossiers de scripts différents).
-2. **Jamais deux sessions sur la même scène ou le même prefab** : les conflits YAML sont pénibles. Les tâches de scène se font seules.
-3. **L'éditeur Unity reste ouvert sur la copie principale.** Les sessions en worktree lancent les tests en ligne de commande (*batchmode*). Le premier lancement réimporte le projet et prend quelques minutes, c'est normal.
+1. **2 à 3 sessions au maximum**, sur des **dossiers de scripts différents**.
+2. **Une scène ou un prefab = une seule session** (c'est le champ « Fichiers réservés » de la spec).
+3. **L'éditeur Unity reste ouvert sur la copie principale.** Les worktrees lancent leurs tests en ligne de commande. Le premier lancement prend quelques minutes, le temps de l'import.
 
 ---
 
-## 3. Les phrases qui font économiser des tokens
+## 3. Le rythme d'un jalon
+
+```
+Début du jalon : les features ⚪ sont détaillées (/next le fait tout seul) ──► tu valides les specs
+      │
+      ▼
+/next ... /next ... /next   (en série ou en parallèle)
+      │
+      ▼
+Fin du jalon : PLAYTEST (une vraie partie) ──► rétrospective dans le plan directeur ──► ajustement des specs suivantes
+```
+
+---
+
+## 4. Les phrases qui font économiser des tokens
 
 | Au lieu de… | Dis… |
 |---|---|
-| « Regarde le code et dis-moi comment marche le piqué » | `Demande à unity-explorer comment fonctionne le piqué du rapace` |
-| Coller 200 lignes de log | Les 3 à 5 lignes d'erreur, ou `Lis Editor.log, lignes avec "error CS"` |
+| « Qu'est-ce que je fais maintenant ? » | `/next` |
+| « Regarde le code et dis-moi comment marche le piqué » | `Demande à unity-explorer comment fonctionne le piqué` |
+| Coller 200 lignes de log | Les 3 à 5 lignes d'erreur |
 | « Corrige les bugs » | `En Play, la tortue traverse les buissons quand elle sprinte` |
-| Continuer une session de 3 heures | Une nouvelle session : `Reprends Docs/tasks/NNN-...md` |
-| « Fais toute la semaine 1 » | Une tâche à la fois avec `/new-feature`, ou un découpage parallèle (§ 2) |
+| Continuer une session de 3 heures | Une nouvelle session, puis `/next` |
+| « Ajoute un système de météo » | `/new-feature Météo : pluie qui réduit la visibilité des rapaces` |
 
-**Choix du modèle** (sélecteur dans l'app) :
-
-- **Opus** pour l'architecture, le réseau et les plans difficiles ;
-- **Sonnet** pour l'implémentation courante et les petits correctifs.
+**Choix du modèle** (sélecteur dans l'app) : **Opus** pour les specs, le réseau et l'architecture ; **Sonnet** pour l'implémentation d'une spec déjà détaillée.
 
 ---
 
-## 4. Quand ça se passe mal
+## 5. Quand ça se passe mal
 
 | Symptôme | Action |
 |---|---|
 | Claude part dans une mauvaise direction | Bouton **Stop**, puis une phrase de recadrage |
-| La session est longue et Claude oublie des choses | Mets à jour le fichier de tâche (`Mets à jour Docs/tasks/NNN avec où on en est`), puis ouvre une nouvelle session |
-| Claude veut lire `Library/` ou un fichier sensible | C'est bloqué par `.claude/settings.json`, refuse la permission si elle est demandée |
-| Une règle revient souvent (« pense à X ») | Ajoute-la en **une ligne** dans `CLAUDE.md` (pas un paragraphe : ce fichier est relu à chaque session) |
-
----
-
-## 5. Le résumé à garder en tête
-
-```
-Nouvelle session ─► /new-feature … ─► tu valides le plan ─► Claude code + teste
-        ▲                                                         │
-        │                                                         ▼
-  session suivante ◄── fermer ◄── Commit ◄── code-reviewer ◄── tu testes dans Unity
-  (repart du fichier
-   Docs/tasks/)
-```
+| La session est longue et Claude oublie des choses | `Mets à jour la spec avec où on en est`, puis une nouvelle session et `/next` |
+| La spec est fausse (découverte en codant ou au playtest) | Dis-le : la spec se **corrige**. C'est normal, c'est la vague glissante. |
+| Une règle revient souvent | Ajoute-la en **une ligne** dans `CLAUDE.md` |

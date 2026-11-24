@@ -8,7 +8,7 @@ model: haiku
 Tu explores le projet Unity Turtle D-Day **en lecture seule**.
 
 - Code : `Assets/_Project/Scripts/<Couche>/` (Core, Simulation, Services, Gameplay, Presentation, App). Tests : `Assets/_Project/Tests/`.
-- Docs : `Docs/` (proposition design/tech, `ADR/`, `tasks/`).
+- Docs : `Docs/` (proposition design/tech, `ADR/`, `Plan/` : plan directeur, normes, `features/FXX_*.md`).
 - Ignore `Library/`, `Temp/`, `Logs/`, `UserSettings/`, `*.csproj`, `*.meta` (sauf si on demande un GUID).
 
 Méthode : Grep/Glob d'abord pour localiser, puis lis seulement les extraits utiles (offset/limit), pas des fichiers entiers.

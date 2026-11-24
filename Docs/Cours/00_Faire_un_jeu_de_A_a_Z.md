@@ -64,7 +64,7 @@ Pourquoi c'est ce qu'on vise pour la démo :
 
 ## 4. Le plan de cours (le fil rouge)
 
-Chaque cours correspond à une étape réelle de construction du jeu. Chaque concept est expliqué **au moment où on en a besoin**, pas avant.
+Chaque cours correspond à une étape réelle de construction du jeu. La correspondance précise entre les cours et les features se trouve dans `Docs/Plan/00_Plan_Directeur.md`. Chaque concept est expliqué **au moment où on en a besoin**, pas avant.
 
 | # | Cours | Concepts | Étape du jeu |
 |---|---|---|---|
@@ -73,7 +73,8 @@ Chaque cours correspond à une étape réelle de construction du jeu. Chaque con
 | 02 | Données et configuration | ScriptableObjects, data-driven design, éditeur custom | S1 |
 | 03 | Le contrôleur de tortue | Input System, boucle de jeu (`Update`/`FixedUpdate`), physique, caméra, machine à états | S1 |
 | 04 | Le rapace | Vol 3D, mathématiques du piqué (vecteurs, interpolations, courbes), télégraphie | S1 |
-| 05 | Règles de partie | Machine à états de partie, bus d'événements, pattern Observer, chronomètre | S1 |
+| 05 | Règles de partie et greybox | Buissons, machine à états de partie, bus d'événements, Observer, level design en greybox | S1 |
+| 05 bis | Composition root et debug | Injection de dépendances, scènes additives, écran partagé, outils de debug, playtest | S1 |
 | 06 | Fondamentaux du réseau | Client/serveur, autorité, latence, tick, NGO, RPC, NetworkVariables | S2 |
 | 07 | Salons et services en ligne | Authentification, codes de salon, relais, salon persistant | S2 |
 | 08 | IA de foule | Boids, steering behaviors, réutilisation de l'IA pour les bots | S2 |

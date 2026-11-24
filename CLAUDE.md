@@ -8,7 +8,9 @@ Jeu multijoueur asymétrique (rapaces contre bébés tortues), **Unity 6000.3.25
 |---|---|
 | Game design, choix techniques, feuille de route | `Docs/01_Propositions_Design_et_Tech.md` (long : lire la section utile, pas tout) |
 | Décisions d'architecture déjà prises | `Docs/ADR/` |
-| Tâches en cours (plan + statut) | `Docs/tasks/` (modèle : `_TEMPLATE.md`) |
+| **Quoi construire, dans quel ordre, statuts** | `Docs/Plan/00_Plan_Directeur.md` (lire le § 3 seulement) |
+| Spec d'une feature (conception, étapes, tests) | `Docs/Plan/features/FXX_*.md` (lire seulement celle de la tâche) |
+| Normes d'ingénierie (DoR, DoD, règles de code, budgets) | `Docs/Plan/01_Normes_Ingenierie.md` |
 | Cours pédagogiques | `Docs/Cours/` (ne pas lire pour coder) |
 | Workflow Claude Code (pour l'utilisateur) | `Docs/Guide_Claude_Code.md` (ne pas lire pour coder) |
 
@@ -41,6 +43,7 @@ App ─► Presentation ─► Gameplay ─► Simulation (C# pur) ─► Core
 ## Façon de travailler
 
 - L'utilisateur apprend : **expliquer chaque pattern ou outil nouveau et obtenir son accord avant de l'implémenter.**
-- Grosse tâche : d'abord un plan dans `Docs/tasks/`, validé, puis l'implémentation (skill `/new-feature`).
+- Le travail suit le plan : `/next` démarre ou reprend la prochaine feature, et `/new-feature` ajoute au plan une feature non prévue. La spec de la feature est la mémoire de la tâche : cocher les étapes au fur et à mesure.
+- Chaque feature terminée alimente son cours (`Docs/Cours/`), comme le demande la DoD.
 - Une session = une tâche. Sessions parallèles : une par système (scripts), jamais deux sur la même scène ou le même prefab.
 - Commits : Conventional Commits (`feat:`, `fix:`, `chore:`, `docs:`, `test:`), en anglais.
